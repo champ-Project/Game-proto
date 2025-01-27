@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject playerAim;
     [SerializeField] private CinemachineCamera focusCam;
     [SerializeField] private bool isFocusCamActive;
+    [SerializeField] private GameObject focusObject;
 
     //테스트용 변수
     public UnityEvent onFlashChange;

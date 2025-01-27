@@ -69,6 +69,7 @@
     <Compile Include="Assets\02. Scripts\Interact\SafeInteract\SafeManager.cs" />
     <Compile Include="Assets\02. Scripts\Interact\EVController.cs" />
     <Compile Include="Assets\02. Scripts\Inventory\ItemDataSet.cs" />
+    <Compile Include="Assets\02. Scripts\SlidingPuzzle\SlidingPuzzle.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\02. Scripts\Inventory\InventoryManager.cs" />
     <Compile Include="Assets\02. Scripts\RandomEvent\NewMonoBehaviourScript.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Assets\02. Scripts\Openable\OpenableSet.cs" />
     <Compile Include="Assets\02. Scripts\RandomEvent\LightBlinkEvent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
+    <Compile Include="Assets\02. Scripts\SlidingPuzzle\SlideBlock.cs" />
     <Compile Include="Assets\02. Scripts\CigarMachine\CigMachine.cs" />
     <Compile Include="Assets\02. Scripts\CigarMachine\CigMachineCoinSlot.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
