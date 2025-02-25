@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,9 @@ public class GameManager : MonoBehaviour
     public InventoryManager inventoryManager;
     public SafeManager safeManager;
     public MsgManager msgManager;
+    public EventManager eventManager;
+    public UIManager uiManager;
+    public GuideNoteManager guideNoteManager;
 
     public bool isGetNote = false; //플레이어가 노트를 획득했는지 확인하는 bool 값
     public string nowPlayerName;
@@ -35,6 +39,8 @@ public class GameManager : MonoBehaviour
 
     public Animator mainRoomDoor;
 
+    private Stack<GameObject> uiStack = new Stack<GameObject>();
+
     //public GameObject moveObj;
 
     private void Awake()
@@ -46,6 +52,7 @@ public class GameManager : MonoBehaviour
         inventoryManager = player.GetComponent<InventoryManager>(); 
         safeManager = player.GetComponent<SafeManager>();
         msgManager = GetComponent<MsgManager>();
+        eventManager = GetComponent<EventManager>();
     }
 
     private void Start()
@@ -72,7 +79,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    private void GameTimeSystem()
+    private void GameTimeSystem() //게임 시간 시스템
     {
         gameTime += Time.fixedDeltaTime / realTimeToGameTimeRatio; // 고정된 시간 간격으로 업데이트
 
@@ -112,6 +119,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public float GetTime(string _kind)
+    {
+        if(_kind == "hour")
+        {
+            return gameHours;
+        }
+        else if (_kind == "minute")
+        {
+            return gameMinutes;
+        }
+        return gameTime;
+    }
+
+    /*private void SpecificTimeCheck() 
+    {
+
+    }*/
+
 
     public void PlayerDead(string reason)
     {
@@ -146,7 +171,39 @@ public class GameManager : MonoBehaviour
         characterController.enabled = true;
         playerController.PlayerDontMove(false);
         playerController.CursorState(false);
-        EventManager eventManager = GetComponent<EventManager>();
         eventManager.filmGrain.intensity.value = 0;
     }
+
+    private void HintPageDrop()
+    {
+
+    }
+
+    /*public void AddOpenUI(GameObject openUI)
+    {
+        if (!uiStack.Contains(openUI))
+        {
+            uiStack.Push(openUI);
+            Debug.Log(openUI + "켜짐");
+        }
+    }
+
+
+    //UI매니저로 이동할 가능성이 있음
+    public void CheckUiClose()
+    {
+        if(uiStack.Count > 0)
+        {
+            GameObject LastOpenUI = uiStack.Pop();
+            LastOpenUI.SetActive(false);
+        }
+    }
+
+    public int NowUIStackCheck()
+    {
+        int nowUIStack = uiStack.Count;
+        return nowUIStack;
+    }*/
+
+
 }

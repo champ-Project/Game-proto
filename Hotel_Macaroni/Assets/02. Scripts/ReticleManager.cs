@@ -114,12 +114,27 @@ public class ReticleManager : MonoBehaviour
     {
         if (currentItem != null)
         {
-            Debug.Log("확인");
-            if (currentItem.CompareTag("Item"))
+            //Debug.Log("확인");
+            if (currentItem.CompareTag("Item")) //선택된 오브젝트가 아이탬 태그일 때
             {
-                gameManager.inventoryManager.GetItem(currentItem);
+                
+                var _itemDataSet = currentItem.GetComponent<ItemDataSet>();
+                if (_itemDataSet == null) return;
+
+                switch (_itemDataSet.thisItemData.itemType)
+                {
+                    case ItemType.item:
+                        gameManager.inventoryManager.GetItem(currentItem);
+                        break;
+                    case ItemType.notePage:
+                        gameManager.guideNoteManager.AddHintNote(_itemDataSet);
+                        break;
+                    default:
+                        Debug.Log("아이템 타입이 지정되지 않음");
+                        break;
+                }
             }
-            else if (currentItem.CompareTag("Openable"))
+            else if (currentItem.CompareTag("Openable")) //선택된 오브젝트가 열기 가능한 태그일 때
             {
                 //Animator _currentDoorAnim = currentItem.GetComponent<Animator>();
                 //IInteractable interactable = currentItem.GetComponentInParent<IInteractable>();

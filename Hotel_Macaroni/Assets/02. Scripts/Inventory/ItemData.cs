@@ -5,7 +5,8 @@ public enum ItemType
     none,
     item,
     notePage,
-    storyPaper
+    storyPaper,
+    inspectItem
 }
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "ScriptableObjects/ItemDataAsset")]
@@ -18,6 +19,7 @@ public class ItemData : ScriptableObject
     public string iteminfo;
     [Header("AdditionalOption")]
     public string text;
+    public GameObject prefab;
 
     /*    [System.Serializable]
         public struct ItemData

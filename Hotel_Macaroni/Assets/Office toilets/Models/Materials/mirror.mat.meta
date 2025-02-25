@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e3da4c86987c23f4aaa618df17f740ca
+timeCreated: 1438772484
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/mirror.mat
+  uploadId: 616874

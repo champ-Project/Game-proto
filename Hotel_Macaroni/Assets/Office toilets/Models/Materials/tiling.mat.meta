@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4d50aedb1426c6847b3d294cdf3d9d35
+timeCreated: 1438721552
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/tiling.mat
+  uploadId: 616874

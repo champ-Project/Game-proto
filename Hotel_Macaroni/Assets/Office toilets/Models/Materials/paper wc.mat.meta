@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 646a06ede4a54bb4299a06b81fc5c65e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/paper wc.mat
+  uploadId: 616874

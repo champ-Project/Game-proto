@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: aa1bd804313567e4bac9a0a2435c6e6a
+timeCreated: 1438860811
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/aluminum material.mat
+  uploadId: 616874

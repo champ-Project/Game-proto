@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 98b3682456e47914a9ba515bff365786
+timeCreated: 1439240737
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Prefabs/toilets panels.prefab
+  uploadId: 616874

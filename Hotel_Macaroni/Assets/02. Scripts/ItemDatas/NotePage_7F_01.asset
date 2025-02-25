@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemCode: N001
   itemType: 2
-  itemName: 
+  itemName: "\uCC22\uC5B4\uC9C4\uB178\uD2B801"
   itemImage: {fileID: 0}
   iteminfo: 
   text: 
+  prefab: {fileID: 0}

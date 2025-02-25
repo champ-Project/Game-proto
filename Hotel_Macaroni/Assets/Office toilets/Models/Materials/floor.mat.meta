@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 22d25b8638834314fac9003d11a5f369
+timeCreated: 1438720459
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/floor.mat
+  uploadId: 616874

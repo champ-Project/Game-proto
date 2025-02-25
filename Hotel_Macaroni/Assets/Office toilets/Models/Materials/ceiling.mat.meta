@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 37ce916f70a472644bcb1736dc66818f
+timeCreated: 1438859952
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/ceiling.mat
+  uploadId: 616874

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4b8795edd0c1b0a458ab10b2e5f0901e
+timeCreated: 1439240643
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Prefabs/Paper holder.prefab
+  uploadId: 616874

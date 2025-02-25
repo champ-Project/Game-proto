@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 31bf2ebf8795e7641b49714d971e50b8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/wet floor.mat
+  uploadId: 616874

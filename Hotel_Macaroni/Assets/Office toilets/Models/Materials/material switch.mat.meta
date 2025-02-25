@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 20d991079b19ec84bb6be2489b0c971b
+timeCreated: 1439201535
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/material switch.mat
+  uploadId: 616874

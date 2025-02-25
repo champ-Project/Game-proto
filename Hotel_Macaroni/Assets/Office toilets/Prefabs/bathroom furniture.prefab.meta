@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a6664e34b52b14e43acd2368c17806de
+timeCreated: 1439240468
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Prefabs/bathroom furniture.prefab
+  uploadId: 616874

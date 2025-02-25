@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,14 +7,18 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("MovementOption")]
-    [SerializeField] float walkSpeed = 5f;      // 걷기 속도
-    [SerializeField] float runSpeed = 10f;      // 뛰기 속도
+    [SerializeField] float walkSpeed = 3f;      // 걷기 속도
+    [SerializeField] float runSpeed = 5f;       // 뛰기 속도
     [SerializeField] float mouseSpeed = 8f;     // 마우스 회전 속도
     [SerializeField] float gravity = 10f;       // 중력 값
+
+    [SerializeField] float camHeight = 0.5f;    // 기본 카메라 높이
+    [SerializeField] float crouchHeight = 0.2f;    // 숙였을 때 카메라 높이
     [SerializeField] float maxLookAngle = 60f;  // 상하 회전 각도 제한
-    [SerializeField] float idleCamShake = 0.5f;
-    [SerializeField] float walkCamShake = 5f;
-    [SerializeField] float runCamShake = 10;
+    [SerializeField] float idleCamShake = 0.5f; // idle상태의 카메라 흔들림 값
+    [SerializeField] float walkCamShake = 5f;   // 걷기 상태일 때 카메라 흔들림 값
+    [SerializeField] float runCamShake = 10;    // 달리기 상태일 때 카메라 흔들림 값
+    
 
     private CharacterController controller;     // CharacterController 참조
     private Camera mainCamera;                  // 카메라 참조
@@ -23,16 +28,25 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputVector;                // 이동 입력 (WASD)
 
     [Header("PlayerState")]
-    [SerializeField] private bool isMove;       //이동 상태 여부
+    public int nowFloor = 7;
+    [SerializeField] private bool isMove;       // 이동 상태 여부
     [SerializeField] private bool isRunning;    // RUN 상태 여부
+    [SerializeField] private bool isCrouch;     //숙이기 상태 여부
     [SerializeField] private bool isDontMove = false;       //이동 불가 상태 여부 (기본 false)
     [SerializeField] private bool isFlashActive = false;    //손전등 사용 상태 여부 (기본 false)
 
-    private ReticleManager reticleManager;
-    [SerializeField] private GameObject flashLight;
-    
+    private ReticleManager reticleManager;      // 조준점 매니저
+    private GameManager gameManager;
+
+    //손전등 관련 변수
+    [SerializeField] private GameObject flashLight; // 손전등 게임 오브젝트
+    [SerializeField] float flashLightLife = 10f; // 손전등 수명
+    private float nowFlashLightLife;
+    private Coroutine flashLightCoroutine;
+
 
     //테스트용 시네머신 카메라
+    [SerializeField] private Transform playerCamPos;                                // 플레이어 시네머신 카메라 트래킹 타겟
     [SerializeField] private CinemachineCamera playerCam;
     public CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
     public float flashLightSpeed = 10f;
@@ -46,12 +60,15 @@ public class PlayerController : MonoBehaviour
 
     public GameObject noteUI; //일단 플레이어 컨트롤러에서 임시로 사용
 
-    
+    /*private float smoothTime = 0.3f; // 부드럽게 이동할 시간
+    private Vector3 velocity = Vector3.zero; // 현재 속도*/
+
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();  // CharacterController 초기화
         reticleManager = GetComponent<ReticleManager>();
+        gameManager = GameManager.instance;
         mainCamera = Camera.main;                          // 메인 카메라 참조
         CursorState(false);
     }
@@ -59,6 +76,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         if (!isFlashActive) flashLight.SetActive(false);
+        nowFlashLightLife = flashLightLife;
+        isCrouch = false;
     }
 
     private void FixedUpdate()
@@ -102,10 +121,37 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             isRunning = true;
+            Debug.Log("달리기 상태 + 시간체크");
+            float currentHour = gameManager.GetTime("hour");
+            if(isRunning && (currentHour >= 22f || currentHour < 6f))
+            {
+                Debug.Log("뛰어다니면 안되는 시간대입니다.");
+                gameManager.eventManager.RandomDebuffOn();
+            }
         }
         else if (context.canceled)
         {
             isRunning = false;
+        }
+    }
+
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isCrouch = true;
+            Debug.Log("숙이기 상태");
+            playerCamPos.localPosition = new Vector3(playerCamPos.localPosition.x, crouchHeight, playerCamPos.localPosition.z);
+            //Vector3 targetPosition = new Vector3(playerCamPos.localPosition.x, crouchHeight, playerCamPos.localPosition.z);
+            //playerCamPos.localPosition = Vector3.SmoothDamp(playerCamPos.localPosition, targetPosition, ref velocity, smoothTime);
+        }
+        else if (context.canceled)
+        {
+            isCrouch= false;
+            Debug.Log("숙이기 해제");
+            playerCamPos.localPosition = new Vector3(playerCamPos.localPosition.x, camHeight, playerCamPos.localPosition.z);
+            //Vector3 targetPosition = new Vector3(playerCamPos.localPosition.x, camHeight, playerCamPos.localPosition.z);
+            //playerCamPos.localPosition = Vector3.SmoothDamp(playerCamPos.localPosition, targetPosition, ref velocity, smoothTime);
         }
     }
 
@@ -177,7 +223,7 @@ public class PlayerController : MonoBehaviour
         {
             reticleManager.InteractionCheck();
         }
-        Debug.Log("Test");
+        //Debug.Log("Test");
     }
 
     public void OnFlashLight(InputAction.CallbackContext context)
@@ -188,6 +234,14 @@ public class PlayerController : MonoBehaviour
             flashLight.SetActive(isActive);
             isFlashActive = isActive;
             onFlashChange.Invoke();
+            if(isFlashActive && flashLightCoroutine == null)
+            {
+                flashLightCoroutine = StartCoroutine(WorkingFlashLight());
+            }
+            else if (!isFlashActive)
+            {
+                StopFlashCoroutine();
+            }
         }
     }
 
@@ -218,7 +272,28 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (isFocusCamActive)
+            Debug.Log("취소버튼");
+            int _nowUIStack = gameManager.uiManager.NowUIStackCheck();
+            if(_nowUIStack > 0)
+            {
+                gameManager.uiManager.CheckUiClose();
+
+            }
+            else if(_nowUIStack == 0 && isFocusCamActive)
+            {
+                focusCam.Priority = -1;
+                //focusCam.Target.TrackingTarget = null;
+                isFocusCamActive = false;
+                
+            }
+
+            int uiCheck = gameManager.uiManager.NowUIStackCheck();
+            if(uiCheck == 0 && !isFocusCamActive)
+            {
+                CursorState(false);
+                PlayerDontMove(false);
+            }
+            /*if (isFocusCamActive)
             {
                 focusCam.Priority = -1;
                 //focusCam.Target.TrackingTarget = null;
@@ -229,7 +304,7 @@ public class PlayerController : MonoBehaviour
             else
             {
 
-            }
+            }*/
         }
     }
 
@@ -276,5 +351,39 @@ public class PlayerController : MonoBehaviour
         focusCam.Priority = 2;
         CursorState(true);
         PlayerDontMove(true);
+    }
+
+    private IEnumerator WorkingFlashLight()
+    {
+        while (nowFlashLightLife > 0)
+        {
+            nowFlashLightLife -= Time.deltaTime;
+            yield return null;
+        }
+
+        flashLight.SetActive(false);
+        isFlashActive = false;
+        onFlashChange.Invoke();
+        flashLightCoroutine = null;
+    }
+
+    private void StopFlashCoroutine()
+    {
+        if(flashLightCoroutine != null)
+        {
+            StopCoroutine(flashLightCoroutine);
+            flashLightCoroutine = null;
+        }
+    }
+
+    public void ResetFlashLight()
+    {
+        nowFlashLightLife = flashLightLife;
+    }
+
+    public void PlayerMoveSpeed(float _walkSpeed, float _runSpeed)
+    {
+        walkSpeed = _walkSpeed;
+        runSpeed = _runSpeed;
     }
 }

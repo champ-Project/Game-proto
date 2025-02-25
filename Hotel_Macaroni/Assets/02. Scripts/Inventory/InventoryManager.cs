@@ -1,21 +1,49 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    public GameObject inventoryUI;
-    public List<GameObject> inventoryItems = new List<GameObject>();
-    public List<ItemData> invenItemDatas = new List<ItemData>();
-    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    public CanvasGroup mainCanvasGroup;
+    [SerializeField] private GameObject inventoryUI;
+    [SerializeField] private GameObject flashLight;
+    [SerializeField] private bool isFlashLightHas;
+    [SerializeField] private List<GameObject> inventoryItems = new List<GameObject>();
+    [SerializeField] private List<ItemData> invenItemDatas = new List<ItemData>();
+    [SerializeField] private List<InventorySlot> inventorySlots = new List<InventorySlot>();
     [SerializeField] private Sprite unknownItemImage;
+    [SerializeField] private Image flashLightIcon;
     private PlayerController playerController;
     private Color changeColor;
 
-    private void Start()
+    [SerializeField] private ToggleGroup toggleGroup;
+    [SerializeField] private Toggle currentSelectToggle;
+    [SerializeField] private ItemData selectItemData;
+
+    [Header("아이템 디테일")]
+    [SerializeField] private Image viewItemImage;
+    [SerializeField] private Text viewItemNameText;
+    [SerializeField] private Text viewItemInfoText;
+
+    [SerializeField] private GameObject inspectCamera;
+    [SerializeField] private InspectSystem inspectSystem;
+    [SerializeField] private Button viewDetailBtn;
+
+    private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        inspectSystem = inspectCamera.GetComponentInChildren<InspectSystem>();
+    }
+
+    private void Start()
+    {
+        
+        SetInventorySlotToggles();
+        viewDetailBtn.onClick.AddListener(InspectViewActive);
+        //if(toggleGroup == null) toggleGroup = gameObject.GetComponent<ToggleGroup>();
         //playerController = GameManager.instance.playerController;
     }
 
@@ -30,7 +58,8 @@ public class InventoryManager : MonoBehaviour
 
             if (isActive) 
             {
-                GameManager.instance.nowOpenUI = inventoryUI; 
+                GameManager.instance.nowOpenUI = inventoryUI;
+                GameManager.instance.uiManager.AddOpenUI(inventoryUI, true);
             }
             else 
             {
@@ -40,6 +69,12 @@ public class InventoryManager : MonoBehaviour
             inventoryUI.SetActive(isActive);
             playerController.PlayerDontMove(isActive);
             playerController.CursorState(isActive);
+
+            if(currentSelectToggle != null)
+            {
+                currentSelectToggle.isOn = !isActive;
+                currentSelectToggle = null;
+            }
             /*Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             GameManager.instance.playerController.isDontMove = true;*/
@@ -53,6 +88,17 @@ public class InventoryManager : MonoBehaviour
         if (_itemdata == null)
         {
             Debug.LogError("해당 오브젝트에 ItemData없음");
+            return;
+        }
+
+        if (_itemdata.itemName == "FlashLight")
+        {
+            if(flashLightIcon != null && flashLightIcon.gameObject.activeSelf == false)
+            {
+                flashLightIcon.gameObject.SetActive(true);
+            }
+            playerController.ResetFlashLight();
+            Destroy(_gameObject);
             return;
         }
         invenItemDatas.Add(_itemdata);
@@ -153,5 +199,76 @@ public class InventoryManager : MonoBehaviour
                 inventorySlots[i].itemImage.color = changeColor;
             }           
         }
+    }
+
+    private void CheckLightIcon()
+    {
+
+    }
+
+    private void SetInventorySlotToggles()
+    {
+        foreach(var slot in inventorySlots)
+        {
+            Toggle toggle = slot.GetComponent<Toggle>();
+            toggle.onValueChanged.AddListener((isOn) => ToggleChanged(toggle, isOn));
+        }
+    }
+
+    private void ToggleChanged(Toggle toggle, bool isOn)
+    {
+        InventorySlot inventorySlot = toggle.GetComponent<InventorySlot>();
+        if (toggle.isOn)
+        {
+            currentSelectToggle = toggle;
+            //Debug.Log(toggle.name + "해당 토글체크");
+            
+            if (inventorySlots.Contains(inventorySlot) == true && inventorySlot.ItemData != null)
+            {
+                if (inventorySlot.ItemData.name == null || inventorySlot.ItemData.iteminfo == null || inventorySlot.ItemData.itemImage == null)
+                {
+                    Debug.LogError("아이템 데이터에 공백 존재");
+                    return;
+                }
+                viewItemImage.enabled = true;
+                selectItemData = inventorySlot.ItemData;
+                viewItemNameText.text = selectItemData.itemName;
+                viewItemInfoText.text = selectItemData.iteminfo;
+                viewItemImage.sprite = selectItemData.itemImage;
+            }
+            else
+            {
+                Debug.Log("슬롯에 아이템이 없음");
+            }
+        }
+        else
+        {
+            
+            if (selectItemData !=null && selectItemData == inventorySlot.ItemData)
+            {
+                currentSelectToggle = null;
+                viewItemImage.enabled=false;
+                selectItemData = null;
+                viewItemNameText.text = "아이템 이름";
+                viewItemInfoText.text = "아이템 설명";
+                viewItemImage.sprite = null;
+            }
+        }
+    }
+
+    private void InspectViewActive()
+    {
+        if (selectItemData == null) 
+        {
+            Debug.Log("선택된 아이템 없음");
+            return;
+        }
+
+        if (inspectSystem != null && selectItemData.prefab != null)
+        {
+            mainCanvasGroup.alpha = 0;
+            inspectSystem.gameObject.SetActive(true);
+            inspectSystem.EnableInspectView(selectItemData.prefab);
+        }    
     }
 }

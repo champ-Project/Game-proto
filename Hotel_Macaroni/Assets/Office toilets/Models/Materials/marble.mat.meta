@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a417d8caab9bd5c4ca59e6df43834fe9
+timeCreated: 1438758529
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 43582
+  packageName: Office Toilets
+  packageVersion: 1.2
+  assetPath: Assets/Office toilets/Models/Materials/marble.mat
+  uploadId: 616874

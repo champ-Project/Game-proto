@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: FlashLight
   m_EditorClassIdentifier: 
   itemCode: E001
-  itemType: 0
+  itemType: 1
   itemName: FlashLight
   itemImage: {fileID: 0}
   iteminfo: 
+  text: 
